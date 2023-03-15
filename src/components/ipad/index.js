@@ -2,11 +2,13 @@
 import { h, render, Component } from 'preact';
 // import stylesheets for ipad & button
 import style from './style';
+import style_ipad2 from '../button2/style_ipad2'
 import style_ipad from '../button/style_ipad';
 // import jquery for API calls
 import $ from 'jquery';
 // import the Button component
 import Button from '../button';
+import Button2 from '../button2';
 
 export default class Ipad extends Component {
 //var Ipad = React.createClass({
@@ -17,7 +19,9 @@ export default class Ipad extends Component {
 		// temperature state
 		this.state.temp = "";
 		// button display state
-		this.setState({ display: true });
+		this.setState({ display: true});
+
+		this.state.buttonExpanded = false;
     }
 
 	// a call to fetch weather data via wunderground
@@ -31,7 +35,11 @@ export default class Ipad extends Component {
 			error : function(req, err){ console.log('API call failed ' + err); }
 		})
 		// once the data grabbed, hide the button
-		this.setState({ display: false });
+		this.setState({ display: true });
+	}
+
+	gone = () => {
+		this.setState({buttonExpanded: true});
 	}
 
 	// the main render method for the iphone component
@@ -51,6 +59,9 @@ export default class Ipad extends Component {
 				<div class={ style.details }></div>
 				<div class={ style_ipad.container }>
 					{ this.state.display ? <Button class={ style_ipad.button } clickFunction={ this.fetchWeatherData }/ > : null }
+				</div>
+				<div class={ style_ipad2.container }>
+				{ this.state.display ? <Button2 class={ `${style_ipad2.button2} ${this.state.buttonExpanded ? style_ipad2.buttonExpanded : ""}`} clickFunction={ this.gone }/ > : null }
 				</div>
 			</div>
 		);
